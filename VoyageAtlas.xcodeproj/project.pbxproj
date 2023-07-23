@@ -14,6 +14,10 @@
 		A1F2B9B82A6D8D65000A938F /* VoyageAtlasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9B72A6D8D65000A938F /* VoyageAtlasTests.swift */; };
 		A1F2B9C22A6D8D65000A938F /* VoyageAtlasUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9C12A6D8D65000A938F /* VoyageAtlasUITests.swift */; };
 		A1F2B9C42A6D8D65000A938F /* VoyageAtlasUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9C32A6D8D65000A938F /* VoyageAtlasUITestsLaunchTests.swift */; };
+		A1F2B9D12A6D9132000A938F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9D02A6D9132000A938F /* ProfileView.swift */; };
+		A1F2B9D32A6D918C000A938F /* ProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9D22A6D918C000A938F /* ProfilePicture.swift */; };
+		A1F2B9D52A6D94DD000A938F /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9D42A6D94DD000A938F /* PostView.swift */; };
+		A1F2B9D72A6DC25E000A938F /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9D62A6DC25E000A938F /* PostListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		A1F2B9BD2A6D8D65000A938F /* VoyageAtlasUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoyageAtlasUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F2B9C12A6D8D65000A938F /* VoyageAtlasUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageAtlasUITests.swift; sourceTree = "<group>"; };
 		A1F2B9C32A6D8D65000A938F /* VoyageAtlasUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageAtlasUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A1F2B9D02A6D9132000A938F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A1F2B9D22A6D918C000A938F /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
+		A1F2B9D42A6D94DD000A938F /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		A1F2B9D62A6DC25E000A938F /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +104,10 @@
 			children = (
 				A1F2B9A62A6D8D62000A938F /* VoyageAtlasApp.swift */,
 				A1F2B9A82A6D8D62000A938F /* ContentView.swift */,
+				A1F2B9D02A6D9132000A938F /* ProfileView.swift */,
+				A1F2B9D62A6DC25E000A938F /* PostListView.swift */,
+				A1F2B9D42A6D94DD000A938F /* PostView.swift */,
+				A1F2B9D22A6D918C000A938F /* ProfilePicture.swift */,
 				A1F2B9AA2A6D8D65000A938F /* Assets.xcassets */,
 				A1F2B9AC2A6D8D65000A938F /* Preview Content */,
 			);
@@ -257,7 +269,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1F2B9D32A6D918C000A938F /* ProfilePicture.swift in Sources */,
 				A1F2B9A92A6D8D62000A938F /* ContentView.swift in Sources */,
+				A1F2B9D12A6D9132000A938F /* ProfileView.swift in Sources */,
+				A1F2B9D52A6D94DD000A938F /* PostView.swift in Sources */,
+				A1F2B9D72A6DC25E000A938F /* PostListView.swift in Sources */,
 				A1F2B9A72A6D8D62000A938F /* VoyageAtlasApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
