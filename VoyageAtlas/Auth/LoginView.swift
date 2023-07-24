@@ -38,35 +38,38 @@ struct LoginView_Previews: PreviewProvider {
     }
 }
 
-struct LoginBody: Decodable {
+struct LoginBody: Decodable, Encodable {
     var email: String
     var password: String
 }
 
 class Auth: ObservableObject {
     func login(body: LoginBody) {
-        guard let url = URL(string: "https://jsonplaceholder.typicode.com/users") else { fatalError("Missing URL") }
-        let jsonData = try? JSONSerialization.data(withJSONObject: body)
+        guard let url = URL(string: "http://localhost:3000/users/login") else { fatalError("Missing URL") }
+        let jsonData = try! JSONEncoder().encode(body)
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
         
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            print("-----> data: \(data)")
-            print("-----> error: \(error)")
-            
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
             }
-
-            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-            print("-----1> responseJSON: \(responseJSON)")
-            if let responseJSON = responseJSON as? [String: Any] {
-                print("-----2> responseJSON: \(responseJSON)")
+            
+            if let token = try? JSONDecoder().decode(Token.self, from: data) {
+                UserDefaults.standard.set(token.bearer, forKey: "token")
+            } else {
+                print("Token not retrieved")
             }
         }
         
         task.resume()
     }
+}
+
+struct Token: Decodable {
+    var bearer: String
 }
