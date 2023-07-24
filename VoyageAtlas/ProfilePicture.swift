@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProfilePicture: View {
+    var width: CGFloat
+    var height: CGFloat
     var body: some View {
         Image("ProfilePic")
             .resizable()
@@ -16,13 +18,13 @@ struct ProfilePicture: View {
                 Circle().stroke(.white, lineWidth: 4)
             }
             .aspectRatio(contentMode: .fit)
-            .frame(width: 200, height: 200)
+            .frame(width: width, height: height)
             .shadow(radius: 7)
     }
 }
 
 struct ProfilePicture_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePicture()
+        ProfilePicture(width: 200, height: 200)
     }
 }

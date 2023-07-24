@@ -15,7 +15,7 @@ struct ProfileView: View {
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: 200)
                 .ignoresSafeArea(edges: .top)
-            ProfilePicture()
+            ProfilePicture(width: 200, height: 200)
                 .offset(y: -175)
                 .padding(.bottom, -250)
             Text("Josue Morales")
