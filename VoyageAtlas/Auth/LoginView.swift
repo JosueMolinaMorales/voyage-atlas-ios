@@ -11,6 +11,8 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var auth = Auth()
+    @Binding var isLoggedIn: Bool;
+    
     var body: some View {
         VStack {
             GroupBox(label: Label("Login", systemImage: "person.circle.fill")) {
@@ -19,7 +21,13 @@ struct LoginView: View {
                     .padding(4)
                 SecureField("Password", text: $password) {}.padding(4)
                 HStack {
-                    Button(action: {auth.login(body: LoginBody(email: email, password: password))}) {
+                    Button(action: {
+                        auth.login(body: LoginBody(email: email, password: password)) {
+                            isLoggedIn.toggle()
+                            print("isLoggedIn has been toggled value is now: " + (isLoggedIn ? "true" : "false"))
+                        }
+                        
+                    }) {
                         Text("Sign In")
                     }.buttonStyle(.bordered)
                     Button(action: {}) {
@@ -34,7 +42,8 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        @State var loggedIn = false;
+        LoginView(isLoggedIn: $loggedIn)
     }
 }
 
@@ -44,10 +53,10 @@ struct LoginBody: Decodable, Encodable {
 }
 
 class Auth: ObservableObject {
-    func login(body: LoginBody) {
+    func login(body: LoginBody, onSuccess: @escaping () -> Void) {
         guard let url = URL(string: "http://localhost:3000/users/login") else { fatalError("Missing URL") }
         let jsonData = try! JSONEncoder().encode(body)
-
+        
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
@@ -61,6 +70,8 @@ class Auth: ObservableObject {
             
             if let token = try? JSONDecoder().decode(Token.self, from: data) {
                 UserDefaults.standard.set(token.bearer, forKey: "token")
+                onSuccess()
+                print("Logged In!")
             } else {
                 print("Token not retrieved")
             }

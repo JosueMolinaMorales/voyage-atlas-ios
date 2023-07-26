@@ -8,10 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selection: String? = nil
+    @State private var isLoggedIn = false;
+    @State private var navPath = NavigationPath()
+    @ViewBuilder
     var body: some View {
-        VStack {
-//            ProfileView()
-            LoginView()
+        if !isLoggedIn {
+            LoginView(isLoggedIn: $isLoggedIn)
+        } else {
+            ProfileView()
         }
     }
 }
