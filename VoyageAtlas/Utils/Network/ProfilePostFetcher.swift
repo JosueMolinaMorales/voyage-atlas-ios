@@ -36,7 +36,7 @@ class ProfilePostFetcher: ObservableObject {
             }
             if let posts = try? JSONDecoder().decode([Post].self, from: data) {
                 self.isLoading = false
-                self.posts = posts
+                self.posts = posts.sorted(by: {p1, p2 in p1.created_at > p2.created_at })
                 print(posts)
             } else {
                 let response = response as? HTTPURLResponse;

@@ -38,6 +38,8 @@ struct ProfileView: View {
         .frame(maxHeight: .infinity)
         .toast(isPresenting: $profilePostFetcher.isLoading) {
             AlertToast(type: .loading)
+        }.onAppear() {
+            profilePostFetcher.getUsersPost(userId: "")
         }
     }
 }
