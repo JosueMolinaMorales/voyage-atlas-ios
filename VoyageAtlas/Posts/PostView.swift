@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct PostView: View {
+    @State var post: Post
     var body: some View {
         VStack {
             HStack {
                 ProfilePicture(width: 75, height: 75)
                 VStack(alignment: .leading) {
-                    Text("Joshua Tree National Park Is Amazing!")
+                    Text(post.title)
                         .font(.headline)
                         .multilineTextAlignment(.leading)
 
@@ -21,7 +22,7 @@ struct PostView: View {
                         Text("@JosueMorales")
                             .multilineTextAlignment(.leading)
                         Spacer()
-                        Text("1:00PM 12/12/23")
+                        Text(post.convertCreatedAt())
                             .font(.caption2)
                     }
                 }
@@ -31,7 +32,7 @@ struct PostView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack {
-                Text(" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse porttitor non urna in feugiat. Donec id suscipit turpis, a varius ex. Duis tempor tellus eget enim fringilla tincidunt. Donec a aliquam nunc, eget ullamcorper sem. Aliquam rutrum nec ipsum a tempus. Nullam id dictum tellus...")
+                Text(post.content)
                     .font(.body)
                     .multilineTextAlignment(.leading)
             }
@@ -54,7 +55,14 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView()
+        PostView(post: Post(
+            title: "Joshua Tree National Park is Amazing!",
+            location: "",
+            content: "Joshua Tree has amazing hikes and beautiful star gazing",
+            id: "",
+            author: "",
+            created_at: 231213
+        ))
     }
 }
 

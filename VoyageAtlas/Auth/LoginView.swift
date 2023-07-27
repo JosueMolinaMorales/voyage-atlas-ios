@@ -55,4 +55,5 @@ struct LoginBody: Decodable, Encodable {
 
 struct Token: Decodable {
     var bearer: String
+    var user_id: String
 }

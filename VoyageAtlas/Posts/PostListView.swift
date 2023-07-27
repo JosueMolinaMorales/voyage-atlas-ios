@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct PostListView: View {
+    @State var posts: [Post]
     var body: some View {
         ScrollView {
-            ForEach(1..<50) {_ in
+            ForEach(posts) {post in
                 VStack {
-                    PostView()
+                    PostView(post: post)
                     Divider()
                 }
             }
@@ -22,6 +23,6 @@ struct PostListView: View {
 
 struct PostListView_Previews: PreviewProvider {
     static var previews: some View {
-        PostListView()
+        PostListView(posts: [])
     }
 }

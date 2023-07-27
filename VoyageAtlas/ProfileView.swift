@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import AlertToast
 
 struct ProfileView: View {
+    @StateObject private var profilePostFetcher = ProfilePostFetcher(userId: "")
+    
     var body: some View {
         VStack {
             // Header
@@ -26,8 +29,16 @@ struct ProfileView: View {
                 .font(.subheadline)
                 .padding(.bottom, 8)
 
-            PostListView()
-        }.frame(maxHeight: .infinity)
+            if (!profilePostFetcher.isLoading) {
+                PostListView(posts: profilePostFetcher.posts)
+            } else {
+                Spacer()
+            }
+        }
+        .frame(maxHeight: .infinity)
+        .toast(isPresenting: $profilePostFetcher.isLoading) {
+            AlertToast(type: .loading)
+        }
     }
 }
 

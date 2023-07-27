@@ -26,6 +26,7 @@ class Network: ObservableObject {
             
             if let token = try? JSONDecoder().decode(Token.self, from: data) {
                 UserDefaults.standard.set(token.bearer, forKey: "token")
+                UserDefaults.standard.set(token.user_id, forKey: "userId")
                 onSuccess()
                 print("Logged In!")
             } else {
@@ -63,5 +64,33 @@ class Network: ObservableObject {
         
         task.resume()
     }
+    
+    func getPosts(userId: String, onSuccess: @escaping (_ posts: [Post]) -> Void, onError: @escaping (_ status: Int) -> Void) {
+        guard let url = URL(string: "\(apiUri)/users/4fef2aec-4b4f-4354-a32f-d436310385cc/post") else { fatalError("Missing URL") }
+
+        let token = UserDefaults.standard.string(forKey: "token") ?? "";
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }
+            if let posts = try? JSONDecoder().decode([Post].self, from: data) {
+                onSuccess(posts)
+                print(posts)
+            } else {
+                let response = response as? HTTPURLResponse;
+                let statusCode = response?.statusCode ?? 0;
+                onError(statusCode)
+            }
+        }
+        
+        task.resume()
+    }
+    
     
 }
