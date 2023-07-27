@@ -10,7 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var auth = Auth()
+    @State private var net = Network()
+    @State var onSuccess: () -> Void
     @Binding var isLoggedIn: Bool;
     
     var body: some View {
@@ -22,7 +23,7 @@ struct LoginView: View {
                 SecureField("Password", text: $password) {}.padding(4)
                 HStack {
                     Button(action: {
-                        auth.login(body: LoginBody(email: email, password: password)) {
+                        net.login(body: LoginBody(email: email, password: password)) {
                             isLoggedIn.toggle()
                             print("isLoggedIn has been toggled value is now: " + (isLoggedIn ? "true" : "false"))
                         }
@@ -43,42 +44,13 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         @State var loggedIn = false;
-        LoginView(isLoggedIn: $loggedIn)
+        LoginView(onSuccess: {}, isLoggedIn: $loggedIn)
     }
 }
 
 struct LoginBody: Decodable, Encodable {
     var email: String
     var password: String
-}
-
-class Auth: ObservableObject {
-    func login(body: LoginBody, onSuccess: @escaping () -> Void) {
-        guard let url = URL(string: "http://localhost:3000/users/login") else { fatalError("Missing URL") }
-        let jsonData = try! JSONEncoder().encode(body)
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = jsonData
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                return
-            }
-            
-            if let token = try? JSONDecoder().decode(Token.self, from: data) {
-                UserDefaults.standard.set(token.bearer, forKey: "token")
-                onSuccess()
-                print("Logged In!")
-            } else {
-                print("Token not retrieved")
-            }
-        }
-        
-        task.resume()
-    }
 }
 
 struct Token: Decodable {

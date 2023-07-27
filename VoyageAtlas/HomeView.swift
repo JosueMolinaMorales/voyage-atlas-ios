@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import FloatingButton
 
 struct HomeView: View {
     @State private var showCreatePost = false
+    @State var onCreatePostSuccess: () -> Void
+    
     var body: some View {
         TabView {
             NavigationStack {
@@ -17,7 +20,7 @@ struct HomeView: View {
                         Text("Item \(i)")
                     }
                     .navigationTitle("Home")
-
+                    
                     Button {
                         showCreatePost.toggle()
                     } label: {
@@ -31,8 +34,10 @@ struct HomeView: View {
 
                     }
                     .padding()
-                    .sheet(isPresented: $showCreatePost) {
-                        CreatePostView()
+                    .sheet(isPresented: $showCreatePost ) {
+                        CreatePostView(onSuccess: onCreatePostSuccess)
+                            .presentationDragIndicator(.visible)
+                            .presentationCompactAdaptation(.popover)
                     }
                 }
             }
@@ -49,6 +54,8 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView() {
+            
+        }
     }
 }
