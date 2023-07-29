@@ -37,7 +37,7 @@ struct ContentView: View {
             }
         }.toast(isPresenting: $showSnackbar, duration: 5){
             AlertToast(
-                displayMode: .banner(.pop),
+                displayMode: snackbarType == SnackbarType.Error ? .banner(.pop) : .hud,
                 type: snackbarType == SnackbarType.Error ? .error(Color.red) : .complete(Color.green),
                 title: snackbarTitle,
                 subTitle: snackbarMsg

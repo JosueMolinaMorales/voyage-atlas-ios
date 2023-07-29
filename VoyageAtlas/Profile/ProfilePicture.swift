@@ -10,16 +10,18 @@ import SwiftUI
 struct ProfilePicture: View {
     var width: CGFloat
     var height: CGFloat
+    var shadowRadius: CGFloat = 7
+    var circleOverlayWidth: CGFloat = 4
     var body: some View {
         Image("ProfilePic")
             .resizable()
             .clipShape(Circle())
             .overlay {
-                Circle().stroke(.white, lineWidth: 4)
+                Circle().stroke(.white, lineWidth: circleOverlayWidth)
             }
             .aspectRatio(contentMode: .fit)
             .frame(width: width, height: height)
-            .shadow(radius: 7)
+            .shadow(radius: shadowRadius)
     }
 }
 

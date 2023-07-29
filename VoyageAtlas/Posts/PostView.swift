@@ -12,7 +12,8 @@ struct PostView: View {
     var body: some View {
         VStack {
             HStack {
-                ProfilePicture(width: 75, height: 75)
+                ProfilePicture(width: 75, height: 75, circleOverlayWidth: 1)
+                    .padding(.horizontal, -8)
                 VStack(alignment: .leading) {
                     Text(post.title)
                         .font(.headline)
@@ -37,18 +38,46 @@ struct PostView: View {
                     .multilineTextAlignment(.leading)
             }
             .padding(.horizontal, 8)
-            
+            ScrollView(.horizontal) {
+                HStack {
+                    Image("JoshTree1")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    Image("JoshTree2")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    Image("JoshuaTree")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    Image("JoshuaTree")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    Image("JoshuaTree")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                    Image("JoshuaTree")
+                        .resizable()
+                        .frame(width: 200, height: 200)
+                }
+            }.scrollIndicators(.hidden)
+            /* Row of Buttons */
             HStack {
-                Image("JoshTree1")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                Image("JoshTree2")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                Image("JoshuaTree")
-                    .resizable()
-                    .frame(width: 100, height: 100)
+                Button {} label: {
+                    Image(systemName: "hand.thumbsup")
+                }.padding(.horizontal, 8)
+                Button {} label: {
+                    Image(systemName: "bubble.left")
+                        .renderingMode(.original)
+                }.padding(.horizontal, 8)
+                
+                Button {} label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .renderingMode(.original)
+                }.padding(.horizontal, 8)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(8)
+            .foregroundColor(Color.black)
         }
     }
 }

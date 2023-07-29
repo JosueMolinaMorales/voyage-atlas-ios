@@ -18,7 +18,7 @@ struct CreatePostView: View {
     @State private var snackbarMsg = ""
     @State private var snackbarTitle = ""
     @State private var snackbarType: SnackbarType = SnackbarType.Error
-    @State private var net = Network()
+    @StateObject private var vm = CreatePostViewModel()
     var body: some View {
         NavigationStack {
             VStack {
@@ -44,7 +44,7 @@ struct CreatePostView: View {
                             showSnackbar = true
                             snackbarMsg = "Content is empty! Please Fill Out To Continue."
                         } else {
-                            net.createPost(
+                            vm.createPost(
                                 body: CreatePost(title: text, location: location, content: content),
                                 onSuccess: {
                                     onSuccess()

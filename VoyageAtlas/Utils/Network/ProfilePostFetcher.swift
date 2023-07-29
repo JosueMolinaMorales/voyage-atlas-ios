@@ -10,7 +10,6 @@ import Foundation
 class ProfilePostFetcher: ObservableObject {
     @Published var posts = [Post]()
     @Published var isLoading = true
-    private let network = Network()
     var userId: String;
     private let apiUri = "http://localhost:3000"
     
@@ -35,8 +34,10 @@ class ProfilePostFetcher: ObservableObject {
                 return
             }
             if let posts = try? JSONDecoder().decode([Post].self, from: data) {
-                self.isLoading = false
-                self.posts = posts.sorted(by: {p1, p2 in p1.created_at > p2.created_at })
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.posts = posts.sorted(by: {p1, p2 in p1.created_at > p2.created_at })
+                }
                 print(posts)
             } else {
                 let response = response as? HTTPURLResponse;

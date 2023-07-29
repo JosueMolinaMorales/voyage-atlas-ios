@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var net = Network()
+    @State private var vm = AuthViewModel()
     @State var onSuccess: () -> Void
     @Binding var isLoggedIn: Bool;
     
@@ -23,7 +23,7 @@ struct LoginView: View {
                 SecureField("Password", text: $password) {}.padding(4)
                 HStack {
                     Button(action: {
-                        net.login(body: LoginBody(email: email, password: password)) {
+                        vm.login(body: LoginBody(email: email, password: password)) {
                             isLoggedIn.toggle()
                             print("isLoggedIn has been toggled value is now: " + (isLoggedIn ? "true" : "false"))
                         }
@@ -55,5 +55,11 @@ struct LoginBody: Decodable, Encodable {
 
 struct Token: Decodable {
     var bearer: String
-    var user_id: String
+    var user: AuthUser
+}
+
+struct AuthUser: Decodable {
+    var id: String
+    var username: String
+    var email: String
 }
