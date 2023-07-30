@@ -11,37 +11,48 @@ import AlertToast
 struct ContentView: View {
     @State private var selection: String? = nil
     @State private var isLoggedIn = false;
-    @State private var navPath = NavigationPath()
     @State private var showSnackbar = false
     @State private var snackbarType: SnackbarType = SnackbarType.Error
     @State private var snackbarTitle = ""
     @State private var snackbarMsg = ""
-    @ViewBuilder
+    @State private var showLoginView = false;
+
+    init() {
+        let token = UserDefaults.standard.string(forKey: "token") ?? ""
+        self.isLoggedIn = !token.isEmpty
+    }
+    
     var body: some View {
-        let token = UserDefaults.standard.string(forKey: "token")
-        VStack {
-            if !isLoggedIn && token == "" {
+        NavigationStack {
+            WelcomeView(onSignInWithEmail: {
+                showLoginView = true
+            })
+            .navigationDestination(isPresented: $showLoginView) {
                 LoginView(onSuccess: {
-                    snackbarTitle = "Logged In!"
-                    snackbarMsg = "You have been successfully logged in"
-                    snackbarType = SnackbarType.Success
                     showSnackbar = true
+                    snackbarMsg = "You have been logged in"
+                    snackbarType = SnackbarType.Success
+                    snackbarTitle = "Logged in!"
                 }, isLoggedIn: $isLoggedIn)
-            } else {
-                HomeView() {
-                    snackbarTitle = "Post Created!"
-                    snackbarMsg = "Your post has been created."
-                    snackbarType = SnackbarType.Success
-                    showSnackbar = true
+                    .navigationBarBackButtonHidden(true)
+                    .navigationDestination(isPresented: $isLoggedIn) {
+                        HomeView() {
+                            snackbarTitle = "Post Created!"
+                            snackbarMsg = "Your post has been created."
+                            snackbarType = SnackbarType.Success
+                            showSnackbar = true
+                        }
+                        .navigationBarBackButtonHidden(true)
+                        .toast(isPresenting: $showSnackbar, duration: 5){
+                            AlertToast(
+                                displayMode: snackbarType == SnackbarType.Error ? .banner(.pop) : .hud,
+                                type: snackbarType == SnackbarType.Error ? .error(Color.red) : .complete(Color.green),
+                                title: snackbarTitle,
+                                subTitle: snackbarMsg
+                            )
+                        }
+                    }
                 }
-            }
-        }.toast(isPresenting: $showSnackbar, duration: 5){
-            AlertToast(
-                displayMode: snackbarType == SnackbarType.Error ? .banner(.pop) : .hud,
-                type: snackbarType == SnackbarType.Error ? .error(Color.red) : .complete(Color.green),
-                title: snackbarTitle,
-                subTitle: snackbarMsg
-            )
         }
     }
 }
@@ -50,4 +61,9 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+enum Views: Hashable {
+    case Login
+    case Home
 }

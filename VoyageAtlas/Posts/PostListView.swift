@@ -10,12 +10,10 @@ import SwiftUI
 struct PostListView: View {
     @State var posts: [Post]
     var body: some View {
-        ScrollView {
-            ForEach(posts) {post in
-                VStack {
-                    PostView(post: post)
-                    Divider()
-                }
+        ForEach(posts) {post in
+            VStack {
+                PostView(post: post)
+                Divider()
             }
         }
     }

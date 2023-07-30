@@ -17,7 +17,7 @@ struct ProfilePicture: View {
             .resizable()
             .clipShape(Circle())
             .overlay {
-                Circle().stroke(.white, lineWidth: circleOverlayWidth)
+                Circle().stroke(VoyageColors.orange, lineWidth: circleOverlayWidth)
             }
             .aspectRatio(contentMode: .fit)
             .frame(width: width, height: height)

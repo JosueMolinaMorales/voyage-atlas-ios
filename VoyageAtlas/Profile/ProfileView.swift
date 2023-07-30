@@ -7,37 +7,61 @@
 
 import SwiftUI
 import AlertToast
+import PagerTabStripView
 
 struct ProfileView: View {
     @StateObject private var profilePostFetcher = ProfilePostFetcher(userId: "")
     
     var body: some View {
         VStack {
-            // Header
-            ScrollingProfileView()
-//            VStack {
-//                Image("HeaderAnnapolis")
-//                    .resizable()
-//                    .ignoresSafeArea(edges: .top)
-//                    .blur(radius: 5)
-//                ProfilePicture(width: 150, height: 150)
-//                    .offset(y: -150)
-//                    .padding(.bottom, -250)
-//
-//            }.frame(maxWidth: .infinity, maxHeight: 125)
+            HeaderView().background(ignoresSafeAreaEdges: .all)
+            ScrollView {
+                VStack {
+                    // Header
+                    HStack {
+                        VStack {
+                            ProfilePicture(width: 100, height: 100, circleOverlayWidth: 2)
+                                .offset(y: -16)
+                        }
+                        
+                        VStack {
+                            VStack {
+                                Text("Josue Morales")
+                                    .font(.headline)
+                                Text("@JosueMorales")
+                                    .font(.subheadline)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 4, trailing: 12))
+                            VStack {
+                                Text("My Description Belongs Here")
+                                    .font(.subheadline)
+                                    .padding(.bottom, 8)
+                                HStack {
+                                    Text("10 Followers")
+                                    Text("10 Following")
+                                }
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Divider()
+                    
+                    if (!profilePostFetcher.isLoading) {
+                        PostListView(posts: profilePostFetcher.posts)
+                    } else {
+                        Spacer()
+                    }
+                }
+                .frame(maxHeight: .infinity)
+                .toast(isPresenting: $profilePostFetcher.isLoading) {
+                    AlertToast(type: .loading)
+                }.refreshable {
+                    profilePostFetcher.getUsersPost(userId: "")
+                }
+            }.padding(.top, -8)
+        }
 
-            if (!profilePostFetcher.isLoading) {
-                PostListView(posts: profilePostFetcher.posts)
-            } else {
-                Spacer()
-            }
-        }
-        .frame(maxHeight: .infinity)
-        .toast(isPresenting: $profilePostFetcher.isLoading) {
-            AlertToast(type: .loading)
-        }.refreshable {
-            profilePostFetcher.getUsersPost(userId: "")
-        }
     }
 }
 

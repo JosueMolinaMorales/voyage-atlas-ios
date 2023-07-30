@@ -15,11 +15,11 @@ struct HomeView: View {
     var body: some View {
         TabView {
             NavigationStack {
+                HeaderView()
                 ZStack(alignment: .bottomTrailing) {
                     List(0..<100) { i in
                         Text("Item \(i)")
                     }
-                    .navigationTitle("Home")
                     
                     Button {
                         showCreatePost.toggle()

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1753BD52A75F26E004852B7 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1753BD42A75F26E004852B7 /* HeaderView.swift */; };
+		A1753BD82A7619C3004852B7 /* PagerTabStripView in Frameworks */ = {isa = PBXBuildFile; productRef = A1753BD72A7619C3004852B7 /* PagerTabStripView */; };
 		A1807FCC2A71A0E500A58AF5 /* FloatingButton in Frameworks */ = {isa = PBXBuildFile; productRef = A1807FCB2A71A0E500A58AF5 /* FloatingButton */; };
 		A1807FCF2A72A9F700A58AF5 /* PostTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1807FCE2A72A9F700A58AF5 /* PostTypes.swift */; };
 		A1807FD12A72BDF600A58AF5 /* ProfilePostFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1807FD02A72BDF600A58AF5 /* ProfilePostFetcher.swift */; };
@@ -17,6 +19,9 @@
 		A197973B2A708CB70011EFC6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A197973A2A708CB70011EFC6 /* HomeView.swift */; };
 		A1CC7C4B2A714D2200EB0FFA /* VoyageInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC7C4A2A714D2200EB0FFA /* VoyageInputField.swift */; };
 		A1CC7C4E2A71617A00EB0FFA /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = A1CC7C4D2A71617A00EB0FFA /* AlertToast */; };
+		A1F09F6F2A7593FB00E85F1D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F09F6E2A7593FB00E85F1D /* WelcomeView.swift */; };
+		A1F09F712A75963C00E85F1D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F09F702A75963C00E85F1D /* Colors.xcassets */; };
+		A1F09F732A7598B000E85F1D /* VoyageLongButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F09F722A7598B000E85F1D /* VoyageLongButton.swift */; };
 		A1F2B9A72A6D8D62000A938F /* VoyageAtlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9A62A6D8D62000A938F /* VoyageAtlasApp.swift */; };
 		A1F2B9A92A6D8D62000A938F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F2B9A82A6D8D62000A938F /* ContentView.swift */; };
 		A1F2B9AB2A6D8D65000A938F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F2B9AA2A6D8D65000A938F /* Assets.xcassets */; };
@@ -49,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A1753BD42A75F26E004852B7 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		A1807FCE2A72A9F700A58AF5 /* PostTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTypes.swift; sourceTree = "<group>"; };
 		A1807FD02A72BDF600A58AF5 /* ProfilePostFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostFetcher.swift; sourceTree = "<group>"; };
 		A18B44872A74BB1900F30B99 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -57,6 +63,9 @@
 		A19797382A7089DD0011EFC6 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		A197973A2A708CB70011EFC6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		A1CC7C4A2A714D2200EB0FFA /* VoyageInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageInputField.swift; sourceTree = "<group>"; };
+		A1F09F6E2A7593FB00E85F1D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		A1F09F702A75963C00E85F1D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		A1F09F722A7598B000E85F1D /* VoyageLongButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageLongButton.swift; sourceTree = "<group>"; };
 		A1F2B9A32A6D8D62000A938F /* VoyageAtlas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoyageAtlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F2B9A62A6D8D62000A938F /* VoyageAtlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageAtlasApp.swift; sourceTree = "<group>"; };
 		A1F2B9A82A6D8D62000A938F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1753BD82A7619C3004852B7 /* PagerTabStripView in Frameworks */,
 				A1807FCC2A71A0E500A58AF5 /* FloatingButton in Frameworks */,
 				A1CC7C4E2A71617A00EB0FFA /* AlertToast in Frameworks */,
 			);
@@ -167,6 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				A1CC7C4A2A714D2200EB0FFA /* VoyageInputField.swift */,
+				A1F09F722A7598B000E85F1D /* VoyageLongButton.swift */,
+				A1753BD42A75F26E004852B7 /* HeaderView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -212,6 +224,8 @@
 				A1F2B9A82A6D8D62000A938F /* ContentView.swift */,
 				A1F2B9AA2A6D8D65000A938F /* Assets.xcassets */,
 				A1F2B9AC2A6D8D65000A938F /* Preview Content */,
+				A1F09F6E2A7593FB00E85F1D /* WelcomeView.swift */,
+				A1F09F702A75963C00E85F1D /* Colors.xcassets */,
 			);
 			path = VoyageAtlas;
 			sourceTree = "<group>";
@@ -269,6 +283,7 @@
 			packageProductDependencies = (
 				A1CC7C4D2A71617A00EB0FFA /* AlertToast */,
 				A1807FCB2A71A0E500A58AF5 /* FloatingButton */,
+				A1753BD72A7619C3004852B7 /* PagerTabStripView */,
 			);
 			productName = VoyageAtlas;
 			productReference = A1F2B9A32A6D8D62000A938F /* VoyageAtlas.app */;
@@ -345,6 +360,7 @@
 			packageReferences = (
 				A1CC7C4C2A71617A00EB0FFA /* XCRemoteSwiftPackageReference "AlertToast" */,
 				A1807FCA2A71A0E500A58AF5 /* XCRemoteSwiftPackageReference "FloatingButton" */,
+				A1753BD62A7619C3004852B7 /* XCRemoteSwiftPackageReference "PagerTabStripView" */,
 			);
 			productRefGroup = A1F2B9A42A6D8D62000A938F /* Products */;
 			projectDirPath = "";
@@ -362,6 +378,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1F09F712A75963C00E85F1D /* Colors.xcassets in Resources */,
 				A1F2B9AE2A6D8D65000A938F /* Preview Assets.xcassets in Resources */,
 				A1F2B9AB2A6D8D65000A938F /* Assets.xcassets in Resources */,
 			);
@@ -389,8 +406,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A197973B2A708CB70011EFC6 /* HomeView.swift in Sources */,
+				A1753BD52A75F26E004852B7 /* HeaderView.swift in Sources */,
 				A18B448A2A74BB8800F30B99 /* CreatePostViewModel.swift in Sources */,
+				A1F09F732A7598B000E85F1D /* VoyageLongButton.swift in Sources */,
 				A18B448F2A74C67500F30B99 /* DiscoverView.swift in Sources */,
+				A1F09F6F2A7593FB00E85F1D /* WelcomeView.swift in Sources */,
 				A1F2B9D32A6D918C000A938F /* ProfilePicture.swift in Sources */,
 				A1CC7C4B2A714D2200EB0FFA /* VoyageInputField.swift in Sources */,
 				A1F356F62A6E9F0900EE2BD0 /* LoginView.swift in Sources */,
@@ -729,6 +749,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A1753BD62A7619C3004852B7 /* XCRemoteSwiftPackageReference "PagerTabStripView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xmartlabs/PagerTabStripView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		A1807FCA2A71A0E500A58AF5 /* XCRemoteSwiftPackageReference "FloatingButton" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/FloatingButton.git";
@@ -748,6 +776,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A1753BD72A7619C3004852B7 /* PagerTabStripView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1753BD62A7619C3004852B7 /* XCRemoteSwiftPackageReference "PagerTabStripView" */;
+			productName = PagerTabStripView;
+		};
 		A1807FCB2A71A0E500A58AF5 /* FloatingButton */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A1807FCA2A71A0E500A58AF5 /* XCRemoteSwiftPackageReference "FloatingButton" */;
