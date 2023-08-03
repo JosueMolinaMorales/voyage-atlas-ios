@@ -10,11 +10,21 @@ import AlertToast
 import PagerTabStripView
 
 struct ProfileView: View {
-    @StateObject private var profilePostFetcher = ProfilePostFetcher(userId: "")
+    @State private var showFollowToast = false
+    var user: AuthUser
+    @ObservedObject private var profilePostFetcher: ProfilePostFetcher = ProfilePostFetcher()
+    @State var followedUserToastTitle = ""
+    
+    init(user: AuthUser) {
+        self.user = user
+        profilePostFetcher.getUsersPost(userId: self.user.id)
+        profilePostFetcher.getFollowers(userId: self.user.id)
+        profilePostFetcher.getFollowing(userId: self.user.id)
+        print("fetching profile")
+    }
     
     var body: some View {
         VStack {
-            HeaderView().background(ignoresSafeAreaEdges: .all)
             ScrollView {
                 VStack {
                     // Header
@@ -28,7 +38,7 @@ struct ProfileView: View {
                             VStack {
                                 Text("Josue Morales")
                                     .font(.headline)
-                                Text("@JosueMorales")
+                                Text("@\(user.username)")
                                     .font(.subheadline)
                             }
                             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -38,28 +48,48 @@ struct ProfileView: View {
                                     .font(.subheadline)
                                     .padding(.bottom, 8)
                                 HStack {
-                                    Text("10 Followers")
-                                    Text("10 Following")
+                                    Text("\(profilePostFetcher.followerCount) Followers")
+                                    Text("\(profilePostFetcher.followingCount) Following")
+                                }
+                                if (profilePostFetcher.isFollowing) {
+                                    Button(action: {profilePostFetcher.unfollowUser(userId: user.id) {
+                                        followedUserToastTitle = "User Unfollowed!"
+                                        showFollowToast = true
+                                        profilePostFetcher.getFollowers(userId: user.id)
+                                    }}) {
+                                        Text("Unfollow")
+                                    }
+                                } else {
+                                    Button(action: {profilePostFetcher.followUser(userId: user.id, onSuccess: {
+                                        followedUserToastTitle = "User Followed!"
+                                        showFollowToast = true
+                                        profilePostFetcher.getFollowers(userId: user.id)
+                                    })}) {
+                                        Text("Follow")
+                                    }
                                 }
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    
                     Divider()
                     
-                    if (!profilePostFetcher.isLoading) {
-                        PostListView(posts: profilePostFetcher.posts)
-                    } else {
-                        Spacer()
-                    }
+                    
+                    PostListView(posts: profilePostFetcher.posts)
                 }
-                .frame(maxHeight: .infinity)
-                .toast(isPresenting: $profilePostFetcher.isLoading) {
-                    AlertToast(type: .loading)
-                }.refreshable {
-                    profilePostFetcher.getUsersPost(userId: "")
-                }
-            }.padding(.top, -8)
+            }
+            .refreshable {
+                profilePostFetcher.getUsersPost(userId: self.user.id)
+                profilePostFetcher.getFollowers(userId: self.user.id)
+                profilePostFetcher.getFollowing(userId: self.user.id)
+            }
+            .toast(isPresenting: $profilePostFetcher.isLoading) {
+                AlertToast(displayMode: .alert, type: .loading)
+            }
+            .toast(isPresenting: $showFollowToast) {
+                AlertToast(displayMode: .banner(.slide), type: .regular, title: followedUserToastTitle)
+            }
         }
 
     }
@@ -67,7 +97,7 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(user: AuthUser(id: "a8275da5-7ab9-4a48-9527-0e61ecf949f6", username: "JosueMorales", email: ""))
     }
 }
 

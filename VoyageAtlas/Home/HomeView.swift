@@ -10,8 +10,8 @@ import FloatingButton
 
 struct HomeView: View {
     @State private var showCreatePost = false
+    @State var loggedInUser: AuthUser
     @State var onCreatePostSuccess: () -> Void
-    
     var body: some View {
         TabView {
             NavigationStack {
@@ -48,17 +48,17 @@ struct HomeView: View {
                 .tabItem {
                     Label("Discover", systemImage: "sparkles")
                 }
-            ProfileView()
+            ProfileView(user: loggedInUser)
             .tabItem {
                 Label("Profile", systemImage: "person.crop.circle")
             }
-        }
+        }.background(Color.red)
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView() {
+        HomeView(loggedInUser: AuthUser(id: "", username: "", email: "")) {
             
         }
     }

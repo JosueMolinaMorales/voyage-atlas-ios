@@ -9,13 +9,21 @@ import SwiftUI
 
 struct PostListView: View {
     @State var posts: [Post]
+    @ViewBuilder
     var body: some View {
-        ForEach(posts) {post in
+        if posts.isEmpty {
             VStack {
-                PostView(post: post)
-                Divider()
+                Text("No Post")
+            }.frame(maxHeight: .infinity)
+        } else {
+            ForEach(posts) {post in
+                VStack {
+                    PostView(post: post)
+                    Divider()
+                }
             }
         }
+
     }
 }
 

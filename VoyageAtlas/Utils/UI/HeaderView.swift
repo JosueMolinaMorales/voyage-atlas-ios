@@ -16,7 +16,6 @@ struct HeaderView: View {
                 .padding(.bottom)
         }
         .frame(maxWidth: .infinity)
-        .background(VoyageColors.raisinBlack)
     }
 }
 

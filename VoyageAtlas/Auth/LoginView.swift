@@ -20,6 +20,7 @@ struct LoginView: View {
                 TextField("Email", text: $email)
                     .autocorrectionDisabled(true)
                     .padding(4)
+                    .keyboardType(.emailAddress)
                 SecureField("Password", text: $password) {}.padding(4)
                 HStack {
                     Button(action: {
@@ -58,7 +59,7 @@ struct Token: Decodable {
     var user: AuthUser
 }
 
-struct AuthUser: Decodable {
+struct AuthUser: Decodable, Identifiable, Hashable {
     var id: String
     var username: String
     var email: String

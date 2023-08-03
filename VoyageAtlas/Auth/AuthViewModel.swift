@@ -26,9 +26,10 @@ class AuthViewModel: ObservableObject {
             
             if let token = try? JSONDecoder().decode(Token.self, from: data) {
                 // TODO: Update this
-                UserDefaults.standard.set(token.bearer, forKey: "token")
-                UserDefaults.standard.set(token.user.id, forKey: "userId")
-                UserDefaults.standard.set(token.user.username, forKey: "username")
+                UserDefaults.standard.setValue(token.bearer, forKey: "token")
+                UserDefaults.standard.setValue(token.user.id, forKey: "userId")
+                UserDefaults.standard.setValue(token.user.username, forKey: "username")
+                UserDefaults.standard.setValue(token.user.email, forKey: "email")
                 onSuccess()
                 print("Logged In!")
             } else {

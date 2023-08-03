@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A1753BD52A75F26E004852B7 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1753BD42A75F26E004852B7 /* HeaderView.swift */; };
 		A1753BD82A7619C3004852B7 /* PagerTabStripView in Frameworks */ = {isa = PBXBuildFile; productRef = A1753BD72A7619C3004852B7 /* PagerTabStripView */; };
+		A176223C2A7ADBAE0083EF0E /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A176223B2A7ADBAE0083EF0E /* DiscoverViewModel.swift */; };
 		A1807FCC2A71A0E500A58AF5 /* FloatingButton in Frameworks */ = {isa = PBXBuildFile; productRef = A1807FCB2A71A0E500A58AF5 /* FloatingButton */; };
 		A1807FCF2A72A9F700A58AF5 /* PostTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1807FCE2A72A9F700A58AF5 /* PostTypes.swift */; };
 		A1807FD12A72BDF600A58AF5 /* ProfilePostFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1807FD02A72BDF600A58AF5 /* ProfilePostFetcher.swift */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		A1753BD42A75F26E004852B7 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		A176223B2A7ADBAE0083EF0E /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
 		A1807FCE2A72A9F700A58AF5 /* PostTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTypes.swift; sourceTree = "<group>"; };
 		A1807FD02A72BDF600A58AF5 /* ProfilePostFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostFetcher.swift; sourceTree = "<group>"; };
 		A18B44872A74BB1900F30B99 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				A18B448E2A74C67500F30B99 /* DiscoverView.swift */,
+				A176223B2A7ADBAE0083EF0E /* DiscoverViewModel.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				A19797392A7089DD0011EFC6 /* CreatePostView.swift in Sources */,
 				A1F2B9D52A6D94DD000A938F /* PostView.swift in Sources */,
 				A18B44882A74BB1900F30B99 /* AuthViewModel.swift in Sources */,
+				A176223C2A7ADBAE0083EF0E /* DiscoverViewModel.swift in Sources */,
 				A1F2B9D72A6DC25E000A938F /* PostListView.swift in Sources */,
 				A1807FD12A72BDF600A58AF5 /* ProfilePostFetcher.swift in Sources */,
 				A1F2B9A72A6D8D62000A938F /* VoyageAtlasApp.swift in Sources */,
