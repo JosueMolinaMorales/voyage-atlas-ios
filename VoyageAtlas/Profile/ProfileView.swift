@@ -12,79 +12,58 @@ import PagerTabStripView
 struct ProfileView: View {
     @State private var showFollowToast = false
     var user: AuthUser
-    @ObservedObject private var profilePostFetcher: ProfilePostFetcher = ProfilePostFetcher()
+    @ObservedObject private var vm: ProfilePostFetcher = ProfilePostFetcher()
     @State var followedUserToastTitle = ""
     
     init(user: AuthUser) {
         self.user = user
-        profilePostFetcher.getUsersPost(userId: self.user.id)
-        profilePostFetcher.getFollowers(userId: self.user.id)
-        profilePostFetcher.getFollowing(userId: self.user.id)
+        vm.getUsersPost(userId: self.user.id)
+        vm.getFollowers(userId: self.user.id)
+        vm.getFollowing(userId: self.user.id)
         print("fetching profile")
     }
     
     var body: some View {
-        VStack {
+        NavigationStack {
             ScrollView {
                 VStack {
                     // Header
-                    HStack {
-                        VStack {
-                            ProfilePicture(width: 100, height: 100, circleOverlayWidth: 2)
-                                .offset(y: -16)
-                        }
-                        
-                        VStack {
+                    ProfileHeaderView(
+                        user: user,
+                        vm: vm,
+                        followedUserToastTitle: $followedUserToastTitle,
+                        showFollowToast: $showFollowToast
+                    ).navigationDestination(for: FollowerFollowing.self) { ff in
+                        PagerTabStripView {
                             VStack {
-                                Text("Josue Morales")
-                                    .font(.headline)
-                                Text("@\(user.username)")
-                                    .font(.subheadline)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 4, trailing: 12))
-                            VStack {
-                                Text("My Description Belongs Here")
-                                    .font(.subheadline)
-                                    .padding(.bottom, 8)
-                                HStack {
-                                    Text("\(profilePostFetcher.followerCount) Followers")
-                                    Text("\(profilePostFetcher.followingCount) Following")
-                                }
-                                if (profilePostFetcher.isFollowing) {
-                                    Button(action: {profilePostFetcher.unfollowUser(userId: user.id) {
-                                        followedUserToastTitle = "User Unfollowed!"
-                                        showFollowToast = true
-                                        profilePostFetcher.getFollowers(userId: user.id)
-                                    }}) {
-                                        Text("Unfollow")
-                                    }
-                                } else {
-                                    Button(action: {profilePostFetcher.followUser(userId: user.id, onSuccess: {
-                                        followedUserToastTitle = "User Followed!"
-                                        showFollowToast = true
-                                        profilePostFetcher.getFollowers(userId: user.id)
-                                    })}) {
-                                        Text("Follow")
+                                ForEach(ff.followers) { u in
+                                    NavigationLink(value: u) {
+                                        UserSearchResultView(user: u)
                                     }
                                 }
-                            }.frame(maxWidth: .infinity, alignment: .leading)
+                            }.pagerTabItem(tag: 0) {Text("Followers")}
+                            VStack {
+                                ForEach(ff.following) { u in
+                                    NavigationLink(value: u) {
+                                        UserSearchResultView(user: u)
+                                    }
+                                }
+                            }.pagerTabItem(tag: 1){Text("Following")}
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Divider()
                     
                     
-                    PostListView(posts: profilePostFetcher.posts)
+                    PostListView(posts: vm.posts)
                 }
             }
             .refreshable {
-                profilePostFetcher.getUsersPost(userId: self.user.id)
-                profilePostFetcher.getFollowers(userId: self.user.id)
-                profilePostFetcher.getFollowing(userId: self.user.id)
+                vm.getUsersPost(userId: self.user.id)
+                vm.getFollowers(userId: self.user.id)
+                vm.getFollowing(userId: self.user.id)
             }
-            .toast(isPresenting: $profilePostFetcher.isLoading) {
+            .toast(isPresenting: $vm.isLoading) {
                 AlertToast(displayMode: .alert, type: .loading)
             }
             .toast(isPresenting: $showFollowToast) {
@@ -120,4 +99,63 @@ struct ScrollingProfileView: View {
                 .padding(.bottom, 8)
         }
     }
+}
+
+struct ProfileHeaderView: View {
+    var user: AuthUser
+    @ObservedObject var vm: ProfilePostFetcher
+    @Binding var followedUserToastTitle: String
+    @Binding var showFollowToast: Bool
+
+    var body: some View {
+        HStack {
+            VStack {
+                ProfilePicture(width: 100, height: 100, circleOverlayWidth: 2)
+                    .offset(y: -16)
+            }
+            
+            VStack {
+                VStack {
+                    Text("Josue Morales")
+                        .font(.headline)
+                    Text("@\(user.username)")
+                        .font(.subheadline)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 4, trailing: 12))
+                VStack {
+                    Text("My Description Belongs Here")
+                        .font(.subheadline)
+                        .padding(.bottom, 8)
+                    HStack {
+                        NavigationLink("\(vm.followerCount) Followers", value: FollowerFollowing(followers: vm.followers, following: vm.following))
+                        NavigationLink("\(vm.followingCount) Following", value: FollowerFollowing(followers: vm.followers, following: vm.following))
+                    }
+                    if (vm.isFollowing) {
+                        Button(action: {vm.unfollowUser(userId: user.id) {
+                            followedUserToastTitle = "User Unfollowed!"
+                            showFollowToast = true
+                            vm.getFollowers(userId: user.id)
+                        }}) {
+                            Text("Unfollow")
+                        }
+                    } else {
+                        Button(action: {vm.followUser(userId: user.id, onSuccess: {
+                            followedUserToastTitle = "User Followed!"
+                            showFollowToast = true
+                            vm.getFollowers(userId: user.id)
+                        })}) {
+                            Text("Follow")
+                        }
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct FollowerFollowing: Hashable {
+    public var followers: [AuthUser] = []
+    public var following: [AuthUser] = []
 }
