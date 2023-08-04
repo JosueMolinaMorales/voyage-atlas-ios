@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class ProfilePostFetcher: ObservableObject {
+class ProfileViewModel: ObservableObject {
     @Published var posts = [Post]()
     @Published var followers = [AuthUser]()
     @Published var followerCount = 0

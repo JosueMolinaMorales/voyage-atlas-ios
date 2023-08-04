@@ -11,16 +11,12 @@ import PagerTabStripView
 
 struct ProfileView: View {
     @State private var showFollowToast = false
-    var user: AuthUser
-    @ObservedObject private var vm: ProfilePostFetcher = ProfilePostFetcher()
+    @State var user: AuthUser
+    @ObservedObject private var vm: ProfileViewModel = ProfileViewModel()
     @State var followedUserToastTitle = ""
-    
+
     init(user: AuthUser) {
         self.user = user
-        vm.getUsersPost(userId: self.user.id)
-        vm.getFollowers(userId: self.user.id)
-        vm.getFollowing(userId: self.user.id)
-        print("fetching profile")
     }
     
     var body: some View {
@@ -34,19 +30,15 @@ struct ProfileView: View {
                         followedUserToastTitle: $followedUserToastTitle,
                         showFollowToast: $showFollowToast
                     ).navigationDestination(for: FollowerFollowing.self) { ff in
-                        PagerTabStripView {
+                        PagerTabStripView() {
                             VStack {
                                 ForEach(ff.followers) { u in
-                                    NavigationLink(value: u) {
-                                        UserSearchResultView(user: u)
-                                    }
+                                    UserSearchResultView(user: u)
                                 }
                             }.pagerTabItem(tag: 0) {Text("Followers")}
                             VStack {
                                 ForEach(ff.following) { u in
-                                    NavigationLink(value: u) {
-                                        UserSearchResultView(user: u)
-                                    }
+                                    UserSearchResultView(user: u)
                                 }
                             }.pagerTabItem(tag: 1){Text("Following")}
                         }
@@ -69,6 +61,11 @@ struct ProfileView: View {
             .toast(isPresenting: $showFollowToast) {
                 AlertToast(displayMode: .banner(.slide), type: .regular, title: followedUserToastTitle)
             }
+        }.onAppear() {
+            vm.getUsersPost(userId: self.user.id)
+            vm.getFollowers(userId: self.user.id)
+            vm.getFollowing(userId: self.user.id)
+            print("fetching profile for \(self.user.username)")
         }
 
     }
@@ -102,11 +99,11 @@ struct ScrollingProfileView: View {
 }
 
 struct ProfileHeaderView: View {
-    var user: AuthUser
-    @ObservedObject var vm: ProfilePostFetcher
+    @State var user: AuthUser
+    @ObservedObject var vm: ProfileViewModel
     @Binding var followedUserToastTitle: String
     @Binding var showFollowToast: Bool
-
+    
     var body: some View {
         HStack {
             VStack {
@@ -131,21 +128,23 @@ struct ProfileHeaderView: View {
                         NavigationLink("\(vm.followerCount) Followers", value: FollowerFollowing(followers: vm.followers, following: vm.following))
                         NavigationLink("\(vm.followingCount) Following", value: FollowerFollowing(followers: vm.followers, following: vm.following))
                     }
-                    if (vm.isFollowing) {
-                        Button(action: {vm.unfollowUser(userId: user.id) {
-                            followedUserToastTitle = "User Unfollowed!"
-                            showFollowToast = true
-                            vm.getFollowers(userId: user.id)
-                        }}) {
-                            Text("Unfollow")
-                        }
-                    } else {
-                        Button(action: {vm.followUser(userId: user.id, onSuccess: {
-                            followedUserToastTitle = "User Followed!"
-                            showFollowToast = true
-                            vm.getFollowers(userId: user.id)
-                        })}) {
-                            Text("Follow")
+                    if (user.id != UserDefaults.standard.string(forKey: "userId") ?? "") {
+                        if (vm.isFollowing) {
+                            Button(action: {vm.unfollowUser(userId: user.id) {
+                                followedUserToastTitle = "User Unfollowed!"
+                                showFollowToast = true
+                                vm.getFollowers(userId: user.id)
+                            }}) {
+                                Text("Unfollow")
+                            }
+                        } else {
+                            Button(action: {vm.followUser(userId: user.id, onSuccess: {
+                                followedUserToastTitle = "User Followed!"
+                                showFollowToast = true
+                                vm.getFollowers(userId: user.id)
+                            })}) {
+                                Text("Follow")
+                            }
                         }
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading)
