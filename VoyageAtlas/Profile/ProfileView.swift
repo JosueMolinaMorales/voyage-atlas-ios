@@ -11,66 +11,71 @@ import PagerTabStripView
 
 struct ProfileView: View {
     @State private var showFollowToast = false
-    @State var user: AuthUser
     @ObservedObject private var vm: ProfileViewModel = ProfileViewModel()
     @State var followedUserToastTitle = ""
-
+    @State var user: AuthUser
+    
     init(user: AuthUser) {
         self.user = user
+        vm.getUsersPost(userId: self.user.id)
+        vm.getFollowers(userId: self.user.id)
+        vm.getFollowing(userId: self.user.id)
+        print("fetching profile for \(self.user.username)")
     }
+
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack {
-                    // Header
-                    ProfileHeaderView(
-                        user: user,
-                        vm: vm,
-                        followedUserToastTitle: $followedUserToastTitle,
-                        showFollowToast: $showFollowToast
-                    ).navigationDestination(for: FollowerFollowing.self) { ff in
-                        PagerTabStripView() {
-                            VStack {
-                                ForEach(ff.followers) { u in
-                                    UserSearchResultView(user: u)
-                                }
-                            }.pagerTabItem(tag: 0) {Text("Followers")}
-                            VStack {
-                                ForEach(ff.following) { u in
-                                    UserSearchResultView(user: u)
-                                }
-                            }.pagerTabItem(tag: 1){Text("Following")}
-                        }
-                    }
-                    
-                    Divider()
-                    
-                    
-                    PostListView(posts: vm.posts)
-                }
+        ScrollView {
+            VStack {
+                // Header
+                ProfileHeaderView(
+                    user: user,
+                    vm: vm,
+                    followedUserToastTitle: $followedUserToastTitle,
+                    showFollowToast: $showFollowToast
+                )
+                
+                Divider()
+                
+                
+                PostListView(posts: vm.posts)
             }
-            .refreshable {
-                vm.getUsersPost(userId: self.user.id)
-                vm.getFollowers(userId: self.user.id)
-                vm.getFollowing(userId: self.user.id)
-            }
-            .toast(isPresenting: $vm.isLoading) {
-                AlertToast(displayMode: .alert, type: .loading)
-            }
-            .toast(isPresenting: $showFollowToast) {
-                AlertToast(displayMode: .banner(.slide), type: .regular, title: followedUserToastTitle)
-            }
-        }.onAppear() {
+        }
+        .refreshable {
             vm.getUsersPost(userId: self.user.id)
             vm.getFollowers(userId: self.user.id)
             vm.getFollowing(userId: self.user.id)
-            print("fetching profile for \(self.user.username)")
         }
+        .toast(isPresenting: $vm.isLoading) {
+            AlertToast(displayMode: .alert, type: .loading)
+        }
+        .toast(isPresenting: $showFollowToast) {
+            AlertToast(displayMode: .banner(.slide), type: .regular, title: followedUserToastTitle)
+        }
+    }
 
+}
+struct ProfileFollowView: View {
+    @State var ff: FollowerFollowing
+    var body: some View {
+        PagerTabStripView() {
+            VStack {
+                ForEach(ff.followers) { u in
+                    NavigationLink(destination: ProfileView(user: u)) {
+                        UserSearchResultView(user: u)
+                    }
+                }
+            }.pagerTabItem(tag: 0) {Text("Followers")}
+            VStack {
+                ForEach(ff.following) { u in
+                    NavigationLink(destination: ProfileView(user: u)) {
+                        UserSearchResultView(user: u)
+                    }
+                }
+            }.pagerTabItem(tag: 1){Text("Following")}
+        }
     }
 }
-
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView(user: AuthUser(id: "a8275da5-7ab9-4a48-9527-0e61ecf949f6", username: "JosueMorales", email: ""))
@@ -99,7 +104,7 @@ struct ScrollingProfileView: View {
 }
 
 struct ProfileHeaderView: View {
-    @State var user: AuthUser
+    var user: AuthUser
     @ObservedObject var vm: ProfileViewModel
     @Binding var followedUserToastTitle: String
     @Binding var showFollowToast: Bool
@@ -125,8 +130,12 @@ struct ProfileHeaderView: View {
                         .font(.subheadline)
                         .padding(.bottom, 8)
                     HStack {
-                        NavigationLink("\(vm.followerCount) Followers", value: FollowerFollowing(followers: vm.followers, following: vm.following))
-                        NavigationLink("\(vm.followingCount) Following", value: FollowerFollowing(followers: vm.followers, following: vm.following))
+                        NavigationLink(destination: ProfileFollowView(ff: FollowerFollowing(followers: vm.followers, following: vm.following))) {
+                            Text("\(vm.followerCount) Followers")
+                        }
+                        NavigationLink(destination: ProfileFollowView(ff: FollowerFollowing(followers: vm.followers, following: vm.following))) {
+                            Text("\(vm.followingCount) Following")
+                        }
                     }
                     if (user.id != UserDefaults.standard.string(forKey: "userId") ?? "") {
                         if (vm.isFollowing) {

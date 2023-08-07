@@ -20,6 +20,9 @@
 		A197973B2A708CB70011EFC6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A197973A2A708CB70011EFC6 /* HomeView.swift */; };
 		A1CC7C4B2A714D2200EB0FFA /* VoyageInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC7C4A2A714D2200EB0FFA /* VoyageInputField.swift */; };
 		A1CC7C4E2A71617A00EB0FFA /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = A1CC7C4D2A71617A00EB0FFA /* AlertToast */; };
+		A1E127542A7E770D00EF83CA /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E127532A7E770D00EF83CA /* PostViewModel.swift */; };
+		A1E127562A7F306000EF83CA /* FullPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E127552A7F306000EF83CA /* FullPostView.swift */; };
+		A1E127582A7F324200EF83CA /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E127572A7F324200EF83CA /* HomeViewModel.swift */; };
 		A1F09F6F2A7593FB00E85F1D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F09F6E2A7593FB00E85F1D /* WelcomeView.swift */; };
 		A1F09F712A75963C00E85F1D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1F09F702A75963C00E85F1D /* Colors.xcassets */; };
 		A1F09F732A7598B000E85F1D /* VoyageLongButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F09F722A7598B000E85F1D /* VoyageLongButton.swift */; };
@@ -65,6 +68,9 @@
 		A19797382A7089DD0011EFC6 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
 		A197973A2A708CB70011EFC6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		A1CC7C4A2A714D2200EB0FFA /* VoyageInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageInputField.swift; sourceTree = "<group>"; };
+		A1E127532A7E770D00EF83CA /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
+		A1E127552A7F306000EF83CA /* FullPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPostView.swift; sourceTree = "<group>"; };
+		A1E127572A7F324200EF83CA /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A1F09F6E2A7593FB00E85F1D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		A1F09F702A75963C00E85F1D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A1F09F722A7598B000E85F1D /* VoyageLongButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoyageLongButton.swift; sourceTree = "<group>"; };
@@ -134,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				A197973A2A708CB70011EFC6 /* HomeView.swift */,
+				A1E127572A7F324200EF83CA /* HomeViewModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -163,6 +170,8 @@
 				A1F2B9D62A6DC25E000A938F /* PostListView.swift */,
 				A1F2B9D42A6D94DD000A938F /* PostView.swift */,
 				A1CC7C502A71649B00EB0FFA /* CreatePost */,
+				A1E127532A7E770D00EF83CA /* PostViewModel.swift */,
+				A1E127552A7F306000EF83CA /* FullPostView.swift */,
 			);
 			path = Posts;
 			sourceTree = "<group>";
@@ -408,6 +417,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1E127542A7E770D00EF83CA /* PostViewModel.swift in Sources */,
+				A1E127582A7F324200EF83CA /* HomeViewModel.swift in Sources */,
 				A197973B2A708CB70011EFC6 /* HomeView.swift in Sources */,
 				A1753BD52A75F26E004852B7 /* HeaderView.swift in Sources */,
 				A18B448A2A74BB8800F30B99 /* CreatePostViewModel.swift in Sources */,
@@ -422,6 +433,7 @@
 				A1F2B9D12A6D9132000A938F /* ProfileView.swift in Sources */,
 				A19797392A7089DD0011EFC6 /* CreatePostView.swift in Sources */,
 				A1F2B9D52A6D94DD000A938F /* PostView.swift in Sources */,
+				A1E127562A7F306000EF83CA /* FullPostView.swift in Sources */,
 				A18B44882A74BB1900F30B99 /* AuthViewModel.swift in Sources */,
 				A176223C2A7ADBAE0083EF0E /* DiscoverViewModel.swift in Sources */,
 				A1F2B9D72A6DC25E000A938F /* PostListView.swift in Sources */,

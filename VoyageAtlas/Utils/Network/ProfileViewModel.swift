@@ -16,8 +16,37 @@ class ProfileViewModel: ObservableObject {
     @Published var followingCount = 0
     @Published var isLoading = false
     @Published var isFollowing = false
+
     private let apiUri = "http://localhost:3000"
     
+    func getUserById(userId: String) {
+        isLoading = true
+        guard let url = URL(string: "\(apiUri)/users/\(userId)") else { fatalError("Missing URL") }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }
+            if let user = try? JSONDecoder().decode(AuthUser.self, from: data) {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                }
+            } else {
+                let response = response as? HTTPURLResponse;
+                let statusCode = response?.statusCode ?? 0;
+                print("Somethign went wrong: \(statusCode)")
+                print("response: \(data)")
+                print("error: \(error)")
+            }
+        }
+        
+        task.resume()
+    }
     
     func getUsersPost(userId: String) {
         

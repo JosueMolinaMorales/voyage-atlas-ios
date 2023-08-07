@@ -9,6 +9,13 @@ import SwiftUI
 
 struct PostView: View {
     @State var post: Post
+    @ObservedObject private var vm = PostViewModel()
+    
+    init(post: Post) {
+        self.post = post
+        vm.getLikesOfPost(postId: post.id)
+    }
+
     var body: some View {
         VStack {
             HStack {
@@ -43,28 +50,61 @@ struct PostView: View {
                     Image("JoshTree1")
                         .resizable()
                         .frame(width: 200, height: 200)
+                        .shadow(radius: 4, x: 4, y: 4)
                     Image("JoshTree2")
                         .resizable()
                         .frame(width: 200, height: 200)
+                        .shadow(radius: 4, x: 4, y: 4)
                     Image("JoshuaTree")
                         .resizable()
                         .frame(width: 200, height: 200)
+                        .shadow(radius: 4, x: 4, y: 4)
                     Image("JoshuaTree")
                         .resizable()
                         .frame(width: 200, height: 200)
+                        .shadow(radius: 4, x: 4, y: 4)
                     Image("JoshuaTree")
                         .resizable()
                         .frame(width: 200, height: 200)
+                        .shadow(radius: 4, x: 4, y: 4)
                     Image("JoshuaTree")
                         .resizable()
                         .frame(width: 200, height: 200)
-                }
+                        .shadow(radius: 4, x: 4, y: 4)
+                }.padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0))
             }.scrollIndicators(.hidden)
+            
             /* Row of Buttons */
             HStack {
-                Button {} label: {
-                    Image(systemName: "hand.thumbsup")
-                }.padding(.horizontal, 8)
+                Button {
+                    if !vm.isPostLiked {
+                        vm.likePost(postId: post.id)
+                    } else {
+                        vm.unlikePost(postId: post.id)
+                    }
+                } label: {
+                    HStack {
+                        if vm.isPostLiked {
+                            Image(systemName: "hand.thumbsup.fill")
+                                .foregroundColor(VoyageColors.orange)
+                        } else {
+                            Image(systemName: "hand.thumbsup")
+                        }
+                    }
+                }.padding(.horizontal, 4)
+                NavigationLink {
+                    VStack {
+                        List {
+                            ForEach(vm.likes, id: \.self) { like in
+                                NavigationLink(destination: ProfileView(user: like.user)) {
+                                    UserSearchResultView(user: like.user)
+                                }
+                            }
+                        }
+                    }.navigationTitle("Likes")
+                } label: {
+                    Text("\(vm.likes.count)")
+                }
                 Button {} label: {
                     Image(systemName: "bubble.left")
                         .renderingMode(.original)

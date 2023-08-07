@@ -12,33 +12,35 @@ struct DiscoverView: View {
     @StateObject private var vm = DiscoverViewModel()
   
     var body: some View {
-        NavigationStack {
-            ForEach(vm.users) { user in
-                NavigationLink(value: user) {
-                    UserSearchResultView(user: user)
+        VStack {
+            List {
+                Section("Users") {
+                    if vm.users.count == 0 && !vm.isLoading && vm.searchText.count > 0 {
+                        Text("No users matched the query: \(vm.searchText)")
+                    } else {
+                        ForEach(vm.users) { user in
+                            NavigationLink(destination: ProfileView(user: user)) {
+                                UserSearchResultView(user: user)
+                            }
+                        }
+                    }
                 }
-                
-                Divider()
-            }
-            .navigationDestination(for: AuthUser.self) { user in
-                ProfileView(user: user)
-            }
-            if vm.users.count == 0 && !vm.isLoading {
-                Text("No users matched the query: \(vm.searchText)")
             }
         }
+        .navigationTitle("Search")
+        .searchable(text: $vm.searchText, placement: .navigationBarDrawer(displayMode: .always))
         .toast(isPresenting: $vm.isLoading) {
             AlertToast(type: .loading)
         }
-        .searchable(text: $vm.searchText)
-        .textInputAutocapitalization(.never)
         
     }
 }
 
 struct DiscoverView_Previews: PreviewProvider {
     static var previews: some View {
-        DiscoverView()
+        NavigationView {
+            DiscoverView()
+        }
     }
 }
 
