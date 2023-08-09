@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @EnvironmentObject var path: Navigation
     var onSignInWithEmail: () -> Void
     var body: some View {
         VStack {

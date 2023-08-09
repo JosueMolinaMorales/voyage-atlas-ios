@@ -27,8 +27,7 @@ struct DiscoverView: View {
                 }
             }
         }
-        .navigationTitle("Search")
-        .searchable(text: $vm.searchText, placement: .navigationBarDrawer(displayMode: .always))
+        .searchable(text: $vm.searchText, placement: .navigationBarDrawer)
         .toast(isPresenting: $vm.isLoading) {
             AlertToast(type: .loading)
         }

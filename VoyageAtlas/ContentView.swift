@@ -8,6 +8,10 @@
 import SwiftUI
 import AlertToast
 
+class Navigation: ObservableObject {
+    @Published var path = NavigationPath()
+}
+
 struct ContentView: View {
     @State private var selection: String? = nil
     @State private var isLoggedIn = false
@@ -17,23 +21,28 @@ struct ContentView: View {
     @State private var snackbarMsg = ""
     @State private var showLoginView = false
     @State private var loggedInUser: AuthUser
+    @StateObject private var path: Navigation = Navigation()
     
     init() {
         let token = UserDefaults.standard.string(forKey: "token") ?? ""
         if !token.isEmpty {
+            print("Token is not empty")
             self.isLoggedIn = true
             self.loggedInUser = AuthUser(
                 id: UserDefaults.standard.string(forKey: "userId")!,
                 username: UserDefaults.standard.string(forKey: "username")!,
-                email: UserDefaults.standard.string(forKey: "email") ?? ""
+                email: UserDefaults.standard.string(forKey: "email")!,
+                name: UserDefaults.standard.string(forKey: "name")!,
+                description: UserDefaults.standard.string(forKey: "description")!
             )
         } else {
-            self.loggedInUser = AuthUser(id: "", username: "", email: "")
+            print("In else block of content view init")
+            self.loggedInUser = AuthUser(id: "", username: "", email: "", name: "", description: "")
         }
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path.path) {
             WelcomeView(onSignInWithEmail: {
                 showLoginView = true
             })
@@ -47,12 +56,13 @@ struct ContentView: View {
                         loggedInUser = AuthUser(
                             id: UserDefaults.standard.string(forKey: "userId")!,
                             username: UserDefaults.standard.string(forKey: "username")!,
-                            email: UserDefaults.standard.string(forKey: "email")!
+                            email: UserDefaults.standard.string(forKey: "email")!,
+                            name: UserDefaults.standard.string(forKey: "name")!,
+                            description: UserDefaults.standard.string(forKey: "description")!
                         )
-                    },
-                    isLoggedIn: $isLoggedIn
+                        isLoggedIn = true
+                    }
                 )
-                .navigationBarBackButtonHidden(true)
             }
             .navigationDestination(isPresented: $isLoggedIn) {
                 HomeView(loggedInUser: loggedInUser) {
@@ -61,8 +71,14 @@ struct ContentView: View {
                     snackbarType = SnackbarType.Success
                     showSnackbar = true
                 }
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        HeaderView()
+                    }
+                }
+                .toolbarBackground(.visible, for: .navigationBar)
                 .navigationBarBackButtonHidden(true)
-                .toast(isPresenting: $showSnackbar, duration: 5){
+                .toast(isPresenting: $showSnackbar, duration: 2){
                     AlertToast(
                         displayMode: snackbarType == SnackbarType.Error ? .banner(.pop) : .hud,
                         type: snackbarType == SnackbarType.Error ? .error(Color.red) : .complete(Color.green),
@@ -72,6 +88,7 @@ struct ContentView: View {
                 }
             }
         }
+        .environmentObject(path)
         .frame(maxHeight: .infinity)
     
     }

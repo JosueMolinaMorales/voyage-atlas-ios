@@ -30,6 +30,8 @@ class AuthViewModel: ObservableObject {
                 UserDefaults.standard.setValue(token.user.id, forKey: "userId")
                 UserDefaults.standard.setValue(token.user.username, forKey: "username")
                 UserDefaults.standard.setValue(token.user.email, forKey: "email")
+                UserDefaults.standard.setValue(token.user.description, forKey: "description")
+                UserDefaults.standard.setValue(token.user.name, forKey: "name")
                 onSuccess()
                 print("Logged In!")
             } else {

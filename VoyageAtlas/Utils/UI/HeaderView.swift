@@ -12,10 +12,10 @@ struct HeaderView: View {
         HStack {
             Image("VoyageBoat")
                 .resizable()
-                .frame(width: 50, height: 50)
-                .padding(.bottom)
-        }
+                .frame(width: 35, height: 35)
+        }.padding(.init(top: 4, leading: 0, bottom: 8, trailing: 0))
         .frame(maxWidth: .infinity)
+        
     }
 }
 

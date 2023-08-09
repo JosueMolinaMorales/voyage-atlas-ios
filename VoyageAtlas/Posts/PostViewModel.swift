@@ -18,6 +18,8 @@ class PostViewModel: ObservableObject {
         let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
         let username = UserDefaults.standard.string(forKey: "username") ?? ""
         let email = UserDefaults.standard.string(forKey: "email") ?? ""
+        let name = UserDefaults.standard.string(forKey: "name") ?? ""
+        let desc = UserDefaults.standard.string(forKey: "description") ?? ""
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -36,7 +38,7 @@ class PostViewModel: ObservableObject {
             if statusCode == 201 {
                 DispatchQueue.main.async {
                     self.isPostLiked = true
-                    self.likes.append(Like(user: AuthUser(id: userId, username: username, email: email), post_id: postId, created_at: 0))
+                    self.likes.append(Like(user: AuthUser(id: userId, username: username, email: email, name: name, description: desc), post_id: postId, created_at: 0))
                 }
             }
             print("Status Code For liking a post \(statusCode)")

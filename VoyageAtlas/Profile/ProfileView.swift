@@ -14,9 +14,11 @@ struct ProfileView: View {
     @ObservedObject private var vm: ProfileViewModel = ProfileViewModel()
     @State var followedUserToastTitle = ""
     @State var user: AuthUser
+    @State var onLogout: () -> Void
     
-    init(user: AuthUser) {
+    init(user: AuthUser, onLogout: @escaping () -> Void = {}) {
         self.user = user
+        self.onLogout = onLogout
         vm.getUsersPost(userId: self.user.id)
         vm.getFollowers(userId: self.user.id)
         vm.getFollowing(userId: self.user.id)
@@ -32,7 +34,8 @@ struct ProfileView: View {
                     user: user,
                     vm: vm,
                     followedUserToastTitle: $followedUserToastTitle,
-                    showFollowToast: $showFollowToast
+                    showFollowToast: $showFollowToast,
+                    onSignout: onLogout
                 )
                 
                 Divider()
@@ -78,7 +81,7 @@ struct ProfileFollowView: View {
 }
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(user: AuthUser(id: "a8275da5-7ab9-4a48-9527-0e61ecf949f6", username: "JosueMorales", email: ""))
+        ProfileView(user: AuthUser(id: "a8275da5-7ab9-4a48-9527-0e61ecf949f6", username: "JosueMorales", email: "", name: "Josue Morales", description: "My description"))
     }
 }
 
@@ -108,7 +111,8 @@ struct ProfileHeaderView: View {
     @ObservedObject var vm: ProfileViewModel
     @Binding var followedUserToastTitle: String
     @Binding var showFollowToast: Bool
-    
+    @State var onSignout: () -> Void
+
     var body: some View {
         HStack {
             VStack {
@@ -118,7 +122,7 @@ struct ProfileHeaderView: View {
             
             VStack {
                 VStack {
-                    Text("Josue Morales")
+                    Text("\(user.name)")
                         .font(.headline)
                     Text("@\(user.username)")
                         .font(.subheadline)
@@ -126,7 +130,7 @@ struct ProfileHeaderView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(EdgeInsets(top: 10, leading: 0, bottom: 4, trailing: 12))
                 VStack {
-                    Text("My Description Belongs Here")
+                    Text("\(user.description)")
                         .font(.subheadline)
                         .padding(.bottom, 8)
                     HStack {
@@ -154,6 +158,17 @@ struct ProfileHeaderView: View {
                             })}) {
                                 Text("Follow")
                             }
+                        }
+                    }
+                    if (user.id == UserDefaults.standard.string(forKey: "userId") ?? "") {
+                        Button(action: {
+                            UserDefaults.standard.removeObject(forKey: "userId")
+                            UserDefaults.standard.removeObject(forKey: "email")
+                            UserDefaults.standard.removeObject(forKey: "username")
+                            UserDefaults.standard.removeObject(forKey: "token")
+                            onSignout()
+                        }) {
+                            Text("Sign out")
                         }
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading)

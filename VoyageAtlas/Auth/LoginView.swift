@@ -12,7 +12,6 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var vm = AuthViewModel()
     @State var onSuccess: () -> Void
-    @Binding var isLoggedIn: Bool;
     
     var body: some View {
         VStack {
@@ -25,8 +24,7 @@ struct LoginView: View {
                 HStack {
                     Button(action: {
                         vm.login(body: LoginBody(email: email, password: password)) {
-                            isLoggedIn.toggle()
-                            print("isLoggedIn has been toggled value is now: " + (isLoggedIn ? "true" : "false"))
+                            onSuccess()
                         }
                         
                     }) {
@@ -45,7 +43,7 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         @State var loggedIn = false;
-        LoginView(onSuccess: {}, isLoggedIn: $loggedIn)
+        LoginView(onSuccess: {})
     }
 }
 
@@ -63,4 +61,6 @@ struct AuthUser: Decodable, Identifiable, Hashable {
     var id: String
     var username: String
     var email: String
+    var name: String
+    var description: String
 }

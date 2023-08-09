@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var showCreatePost = false
     @State var loggedInUser: AuthUser
     @State var onCreatePostSuccess: () -> Void
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         TabView {
@@ -25,9 +26,12 @@ struct HomeView: View {
             .tabItem {
                 Label("Discover", systemImage: "sparkles")
             }
-            ProfileView(user: loggedInUser)
+            ProfileView(user: loggedInUser, onLogout: {dismiss()})
             .tabItem {
                 Label("Profile", systemImage: "person.crop.circle")
+            }
+            .onAppear {
+                print("Logged in user is \(loggedInUser)")
             }
         }
         .background(Color.red)
@@ -36,9 +40,7 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(loggedInUser: AuthUser(id: "", username: "", email: "")) {
-            
-        }
+        HomeView(loggedInUser: AuthUser(id: "", username: "", email: "", name: "", description: ""), onCreatePostSuccess: {})
     }
 }
 
@@ -49,7 +51,7 @@ struct HomeFeedView: View {
     
     var body: some View {
         VStack {
-            HeaderView()
+//            HeaderView()
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack {
