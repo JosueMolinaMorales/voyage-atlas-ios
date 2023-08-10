@@ -14,6 +14,7 @@ struct PostView: View {
     init(post: Post) {
         self.post = post
         vm.getLikesOfPost(postId: post.id)
+        vm.getAuthorOfPost(postId: post.id, authorId: post.author)
     }
 
     var body: some View {
@@ -27,7 +28,7 @@ struct PostView: View {
                         .multilineTextAlignment(.leading)
 
                     HStack {
-                        Text("@JosueMorales")
+                        Text("@\(vm.author?.username ?? "")")
                             .multilineTextAlignment(.leading)
                         Spacer()
                         Text(post.convertCreatedAt())
@@ -39,11 +40,14 @@ struct PostView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            VStack {
-                Text(post.content)
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-            }
+            NavigationLink(destination: FullPostView(post: post, vm: vm)) {
+                VStack {
+                    Text(post.content)
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                }
+            }.buttonStyle(PlainButtonStyle()) 
+            
             .padding(.horizontal, 8)
             ScrollView(.horizontal) {
                 HStack {

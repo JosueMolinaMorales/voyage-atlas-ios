@@ -11,6 +11,8 @@ class PostViewModel: ObservableObject {
     private let apiUri = "http://localhost:3000"
     @Published var isPostLiked = false
     @Published var likes: [Like] = []
+    @Published var author: AuthUser?
+    @Published var comments: [Comment] = []
     
     func likePost(postId: String) {
         guard let url = URL(string: "\(apiUri)/post/\(postId)/like") else { fatalError("Missing URL") }
@@ -113,10 +115,93 @@ class PostViewModel: ObservableObject {
         
         task.resume()
     }
+    
+    func getAuthorOfPost(postId: String, authorId: String) {
+        guard let url = URL(string: "\(apiUri)/users/\(authorId)") else { fatalError("Missing URL") }
+        let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }
+            
+            let response = response as? HTTPURLResponse;
+            let statusCode = response?.statusCode ?? 0;
+            if let user = try? JSONDecoder().decode(AuthUser.self, from: data) {
+                DispatchQueue.main.async {
+                    self.author = user
+                }
+            } else {
+                let response = response as? HTTPURLResponse;
+                let statusCode = response?.statusCode ?? 0;
+                print("Status Code for getting is post liked \(statusCode)")
+                print("response: \(data)")
+                print("error: \(error)")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func getCommentsForPost(postId: String) {
+        guard let url = URL(string: "\(apiUri)/post/\(postId)/comment") else { fatalError("Missing URL") }
+        let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }
+            
+            let response = response as? HTTPURLResponse;
+            let statusCode = response?.statusCode ?? 0;
+            if let comments = try? JSONDecoder().decode([Comment].self, from: data) {
+                DispatchQueue.main.async {
+                    self.comments = comments
+                }
+            } else {
+                let response = response as? HTTPURLResponse;
+                let statusCode = response?.statusCode ?? 0;
+                print("Status Code for getting is post liked \(statusCode)")
+                print("response: \(data)")
+                print("error: \(error)")
+            }
+        }
+        
+        task.resume()
+    }
 }
 
 struct Like: Decodable, Hashable {
     let user: AuthUser
     let post_id: String
     let created_at: Int32
+}
+
+struct Comment: Decodable, Hashable, Identifiable {
+    let id: String
+    let user_id: String
+    let post_id: String
+    let comment: String
+    let created_at: Double
+    let parent_comment_id: String?
+    
+    func convertCreatedAt() -> String {
+        let date = Date(timeIntervalSince1970: self.created_at)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "EST") //Set timezone that you want
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "HH:mm yyyy-MM-dd" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        return strDate
+    }
 }
