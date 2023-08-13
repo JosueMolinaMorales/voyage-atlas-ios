@@ -11,17 +11,18 @@ class CreatePostViewModel: ObservableObject {
     private let apiUri = "http://localhost:3000"
     
     func createPost(body: CreatePost, onSuccess: @escaping () -> Void, onError: @escaping (_ status: Int) -> Void) {
-        guard let url = URL(string: "\(apiUri)/users/post") else { fatalError("Missing URL") }
         let jsonData = try! JSONEncoder().encode(body)
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
+
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/post")
+            .setMethod(method: "POST")
+            .setBody(body: jsonData)
+            .jsonContentType()
+            .bearerToken(token: token)
+            .build()
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = jsonData
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { _, response, error in
             guard error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return

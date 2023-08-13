@@ -10,6 +10,7 @@ import SwiftUI
 struct FullPostView: View {
     @State var post: Post
     @ObservedObject var vm: PostViewModel
+    @State private var newComment: String = ""
     
     var body: some View {
         ScrollView {
@@ -21,15 +22,18 @@ struct FullPostView: View {
                     VStack {
                         HStack {
                             ProfilePicture(width: 50, height: 50, shadowRadius: 1, circleOverlayWidth: 1)
-                            Text("@Username") // TODO: Add username of commenter
+                            Text("@\(comment.user.name)")
                             Text(comment.convertCreatedAt())
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .border(Color.red, width: 1)
                         Text("\(comment.comment)")
                         Divider()
                     }
                     
                 }
                 Spacer()
+                TextField("New Comment", text: $newComment).textFieldStyle(.roundedBorder).padding(.horizontal, 16)
 
             }
             .frame(maxHeight: .infinity)
@@ -42,6 +46,6 @@ struct FullPostView: View {
 
 struct FullPostView_Previews: PreviewProvider {
     static var previews: some View {
-        FullPostView(post: Post(title: "", location: "", content: "", id: "", author: "", created_at: 9), vm: PostViewModel())
+        FullPostView(post: Post(title: "A new post", location: "", content: "A new post", id: "", author: "", created_at: 9), vm: PostViewModel())
     }
 }

@@ -21,13 +21,13 @@ class ProfileViewModel: ObservableObject {
     
     func getUserById(userId: String) {
         isLoading = true
-        guard let url = URL(string: "\(apiUri)/users/\(userId)") else { fatalError("Missing URL") }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
 
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -40,8 +40,6 @@ class ProfileViewModel: ObservableObject {
                 let response = response as? HTTPURLResponse;
                 let statusCode = response?.statusCode ?? 0;
                 print("Somethign went wrong: \(statusCode)")
-                print("response: \(data)")
-                print("error: \(error)")
             }
         }
         
@@ -51,15 +49,16 @@ class ProfileViewModel: ObservableObject {
     func getUsersPost(userId: String) {
         
         isLoading = true
-        guard let url = URL(string: "\(apiUri)/users/\(userId)/posts") else { fatalError("Missing URL") }
-
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)/posts")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .bearerToken(token: token)
+            .build()
+
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -74,8 +73,6 @@ class ProfileViewModel: ObservableObject {
                 let response = response as? HTTPURLResponse;
                 let statusCode = response?.statusCode ?? 0;
                 print("Somethign went wrong: \(statusCode)")
-                print("response: \(data)")
-                print("error: \(error)")
             }
         }
         
@@ -83,15 +80,17 @@ class ProfileViewModel: ObservableObject {
     }
     
     func followUser(userId: String, onSuccess: @escaping () -> Void) {
-        guard let url = URL(string: "\(apiUri)/users/\(userId)/follow") else { fatalError("Missing URL") }
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            guard let data = data, error == nil else {
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)/follow")
+            .setMethod(method: "POST")
+            .bearerToken(token: token)
+            .jsonContentType()
+            .build()
+
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { _, response, error in
+            guard error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
             }
@@ -111,18 +110,15 @@ class ProfileViewModel: ObservableObject {
     }
     
     func unfollowUser(userId: String, onSuccess: @escaping () -> Void) {
-        guard let url = URL(string: "\(apiUri)/users/\(userId)/unfollow") else { fatalError("Missing URL") }
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "DELETE"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                return
-            }
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)/unfollow")
+            .setMethod(method: "DELETE")
+            .bearerToken(token: token)
+            .jsonContentType()
+            .build()
+
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { _, response, error in
             let response = response as? HTTPURLResponse
             let statusCode = response?.statusCode ?? 0
             if statusCode == 200 {
@@ -140,12 +136,13 @@ class ProfileViewModel: ObservableObject {
     
     func getFollowers(userId: String) {
         guard let url = URL(string: "\(apiUri)/users/\(userId)/followers") else { fatalError("Missing URL") }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)/followers")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
 
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -162,7 +159,6 @@ class ProfileViewModel: ObservableObject {
                 let statusCode = response?.statusCode ?? 0;
                 print("Somethign went wrong: \(statusCode)")
                 print("response: \(data)")
-                print("error: \(error)")
             }
         }
         
@@ -170,13 +166,13 @@ class ProfileViewModel: ObservableObject {
     }
     
     func getFollowing(userId: String) {
-        guard let url = URL(string: "\(apiUri)/users/\(userId)/following") else { fatalError("Missing URL") }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(userId)/following")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
 
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -195,8 +191,6 @@ class ProfileViewModel: ObservableObject {
                 let response = response as? HTTPURLResponse;
                 let statusCode = response?.statusCode ?? 0
                 print("Somethign went wrong: \(statusCode)")
-                print("response: \(data)")
-                print("error: \(error)")
             }
         }
         

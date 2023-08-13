@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A14B8A182A88805F000A2823 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B8A172A88805F000A2823 /* Network.swift */; };
 		A1753BD52A75F26E004852B7 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1753BD42A75F26E004852B7 /* HeaderView.swift */; };
 		A1753BD82A7619C3004852B7 /* PagerTabStripView in Frameworks */ = {isa = PBXBuildFile; productRef = A1753BD72A7619C3004852B7 /* PagerTabStripView */; };
 		A176223C2A7ADBAE0083EF0E /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A176223B2A7ADBAE0083EF0E /* DiscoverViewModel.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A14B8A172A88805F000A2823 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		A1753BD42A75F26E004852B7 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		A176223B2A7ADBAE0083EF0E /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
 		A1807FCE2A72A9F700A58AF5 /* PostTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTypes.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		A18B448B2A74C62500F30B99 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				A1807FD02A72BDF600A58AF5 /* ProfileViewModel.swift */,
 				A1F2B9D22A6D918C000A938F /* ProfilePicture.swift */,
 				A1F2B9D02A6D9132000A938F /* ProfileView.swift */,
 			);
@@ -198,7 +201,7 @@
 		A1CC7C522A7164E300EB0FFA /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				A1807FD02A72BDF600A58AF5 /* ProfileViewModel.swift */,
+				A14B8A172A88805F000A2823 /* Network.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				A1F2B9D72A6DC25E000A938F /* PostListView.swift in Sources */,
 				A1807FD12A72BDF600A58AF5 /* ProfileViewModel.swift in Sources */,
 				A1F2B9A72A6D8D62000A938F /* VoyageAtlasApp.swift in Sources */,
+				A14B8A182A88805F000A2823 /* Network.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

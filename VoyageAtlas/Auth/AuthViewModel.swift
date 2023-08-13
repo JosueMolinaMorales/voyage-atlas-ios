@@ -10,15 +10,16 @@ import Foundation
 class AuthViewModel: ObservableObject {
     private let apiUri = "http://localhost:3000"
     func login(body: LoginBody, onSuccess: @escaping () -> Void) {
-        guard let url = URL(string: "\(apiUri)/users/login") else { fatalError("Missing URL") }
         let jsonData = try! JSONEncoder().encode(body)
+
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/login")
+            .setBody(body: jsonData)
+            .setMethod(method: "POST")
+            .jsonContentType()
+            .build()
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = jsonData
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return

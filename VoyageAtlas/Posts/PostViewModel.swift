@@ -15,7 +15,6 @@ class PostViewModel: ObservableObject {
     @Published var comments: [Comment] = []
     
     func likePost(postId: String) {
-        guard let url = URL(string: "\(apiUri)/post/\(postId)/like") else { fatalError("Missing URL") }
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
         let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
         let username = UserDefaults.standard.string(forKey: "username") ?? ""
@@ -23,12 +22,14 @@ class PostViewModel: ObservableObject {
         let name = UserDefaults.standard.string(forKey: "name") ?? ""
         let desc = UserDefaults.standard.string(forKey: "description") ?? ""
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let network = NetworkBuilder()
+            .bearerToken(token: token)
+            .setUrl(url: "\(apiUri)/post/\(postId)/like")
+            .setMethod(method: "POST")
+            .jsonContentType()
+            .build()
         
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -45,22 +46,21 @@ class PostViewModel: ObservableObject {
             }
             print("Status Code For liking a post \(statusCode)")
             print("response: \(data)")
-            print("error: \(error)")
         }
         
         task.resume()
     }
     
     func getLikesOfPost(postId: String) {
-        guard let url = URL(string: "\(apiUri)/post/\(postId)/like") else { fatalError("Missing URL") }
-
-        var userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+        let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+     
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/post/\(postId)/like")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -75,7 +75,6 @@ class PostViewModel: ObservableObject {
                 let statusCode = response?.statusCode ?? 0;
                 print("Status Code for getting is post liked \(statusCode)")
                 print("response: \(data)")
-                print("error: \(error)")
             }
         
         }
@@ -84,16 +83,17 @@ class PostViewModel: ObservableObject {
     }
     
     func unlikePost(postId: String) {
-        guard let url = URL(string: "\(apiUri)/post/\(postId)/like") else { fatalError("Missing URL") }
         let token = UserDefaults.standard.string(forKey: "token") ?? "";
         let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "DELETE"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/post/\(postId)/like")
+            .setMethod(method: "DELETE")
+            .bearerToken(token: token)
+            .jsonContentType()
+            .build()
         
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -108,30 +108,26 @@ class PostViewModel: ObservableObject {
                     self.likes = self.likes.filter { like in like.user.id != userId }
                 }
             }
-            print("Status Code For liking a post \(statusCode)")
+            print("Status Code For unliking a post \(statusCode)")
             print("response: \(data)")
-            print("error: \(error)")
         }
         
         task.resume()
     }
     
     func getAuthorOfPost(postId: String, authorId: String) {
-        guard let url = URL(string: "\(apiUri)/users/\(authorId)") else { fatalError("Missing URL") }
-        let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users/\(authorId)")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
             }
             
-            let response = response as? HTTPURLResponse;
-            let statusCode = response?.statusCode ?? 0;
             if let user = try? JSONDecoder().decode(AuthUser.self, from: data) {
                 DispatchQueue.main.async {
                     self.author = user
@@ -141,7 +137,6 @@ class PostViewModel: ObservableObject {
                 let statusCode = response?.statusCode ?? 0;
                 print("Status Code for getting is post liked \(statusCode)")
                 print("response: \(data)")
-                print("error: \(error)")
             }
         }
         
@@ -149,21 +144,18 @@ class PostViewModel: ObservableObject {
     }
     
     func getCommentsForPost(postId: String) {
-        guard let url = URL(string: "\(apiUri)/post/\(postId)/comment") else { fatalError("Missing URL") }
-        let userId = UserDefaults.standard.string(forKey: "userId") ?? ""
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/post/\(postId)/comment")
+            .jsonContentType()
+            .setMethod(method: "GET")
+            .build()
         
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
             }
             
-            let response = response as? HTTPURLResponse;
-            let statusCode = response?.statusCode ?? 0;
             if let comments = try? JSONDecoder().decode([Comment].self, from: data) {
                 DispatchQueue.main.async {
                     self.comments = comments
@@ -173,7 +165,6 @@ class PostViewModel: ObservableObject {
                 let statusCode = response?.statusCode ?? 0;
                 print("Status Code for getting is post liked \(statusCode)")
                 print("response: \(data)")
-                print("error: \(error)")
             }
         }
         
@@ -189,7 +180,7 @@ struct Like: Decodable, Hashable {
 
 struct Comment: Decodable, Hashable, Identifiable {
     let id: String
-    let user_id: String
+    let user: AuthUser
     let post_id: String
     let comment: String
     let created_at: Double

@@ -34,12 +34,12 @@ class DiscoverViewModel: ObservableObject {
     
     func getUsers() {
         isLoading = true
-        guard let url = URL(string: "\(apiUri)/users?query=\(self.searchText)") else { fatalError("Missing URL") }
-
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "content-type")
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let network = NetworkBuilder()
+            .setUrl(url: "\(apiUri)/users?query=\(self.searchText)")
+            .setMethod(method: "GET")
+            .jsonContentType()
+            .build()
+        let task = URLSession.shared.dataTask(with: network.createRequest()) { data, response, error in
             guard let data = data, error == nil else {
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -53,6 +53,7 @@ class DiscoverViewModel: ObservableObject {
             } else {
                 let response = response as? HTTPURLResponse;
                 let statusCode = response?.statusCode ?? 0;
+                print("Status code getting users: \(statusCode)")
             }
         }
         
